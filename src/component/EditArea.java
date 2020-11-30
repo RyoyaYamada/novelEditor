@@ -3,7 +3,7 @@ package component;
 import javafx.scene.control.TextArea;
 
 public class EditArea extends TextArea {
-
+	
 	public EditArea() {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}

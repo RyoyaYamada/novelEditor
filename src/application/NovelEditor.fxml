@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import application.EditArea?>
+<?import component.EditArea?>
+<?import component.NovelIndex?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<BorderPane prefHeight="336.0" prefWidth="526.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="application.NovelEditorController">
+<BorderPane prefHeight="336.0" prefWidth="526.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controller.NovelEditorController">
    <top>
       <VBox prefHeight="58.0" prefWidth="479.0" BorderPane.alignment="CENTER">
          <children>
@@ -40,16 +41,16 @@
       </VBox>
    </top>
    <center>
-      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="479.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="splitIndex" dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="479.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="56.0">
                <children>
-                  <TreeView prefHeight="276.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <NovelIndex fx:id="novelIndex" prefHeight="276.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <EditArea prefHeight="158.0" prefWidth="136.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <EditArea fx:id="editArea" prefHeight="158.0" prefWidth="136.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
         </items>
