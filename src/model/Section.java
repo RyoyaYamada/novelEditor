@@ -1,4 +1,4 @@
-package component;
+package model;
 
 public class Section extends IndexNode {
 
