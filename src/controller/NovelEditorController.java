@@ -1,8 +1,9 @@
-package component;
+package controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import component.EditArea;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

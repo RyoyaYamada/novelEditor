@@ -4,6 +4,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import model.IndexNode;
 
 public class IndexCell extends TreeCell<String> {
 	
@@ -11,6 +12,15 @@ public class IndexCell extends TreeCell<String> {
 	
 	public IndexCell() {
 		super();
+	}
+	
+
+	public IndexNode getIndexNode() {
+		return (IndexNode) super.getTreeItem();
+	}
+	
+	public NovelIndex getNovelIndex() {
+		return (NovelIndex) super.getTreeView();
 	}
 
 	@Override
@@ -74,6 +84,7 @@ public class IndexCell extends TreeCell<String> {
 	}
 	
 	private String getString() {
+		// getItem: TreeItemのvalueを返す
         return getItem() == null ? "" : getItem();
     }
 	

@@ -7,7 +7,11 @@ public class IndexNode extends TreeItem<String> {
 		super();
 	}
 
-
+	/**
+	 * コンストラクタ
+	 *
+	 * @param title　タイトル(value)
+	 */
 	public IndexNode(String title) {
 		super(title);
 	}
@@ -18,6 +22,10 @@ public class IndexNode extends TreeItem<String> {
 
 	public void setTitle(String title) {
 		this.setValue(title);
+	}
+
+	public IndexNode getParentNode() {
+		return (IndexNode) super.getParent();
 	}
 
 }
