@@ -1,10 +1,12 @@
 package component;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import model.IndexNode;
+import model.IndexItem;
 
 public class IndexCell extends TreeCell<String> {
 	
@@ -12,17 +14,20 @@ public class IndexCell extends TreeCell<String> {
 	
 	public IndexCell() {
 		super();
+		
+		
 	}
 	
 
-	public IndexNode getIndexNode() {
-		return (IndexNode) super.getTreeItem();
+	public IndexItem getIndexItem() {
+		return (IndexItem) super.getTreeItem();
 	}
 	
 	public NovelIndex getNovelIndex() {
 		return (NovelIndex) super.getTreeView();
 	}
 
+		
 	@Override
 	public void startEdit() {
 		// TODO 自動生成されたメソッド・スタブ
@@ -87,5 +92,22 @@ public class IndexCell extends TreeCell<String> {
 		// getItem: TreeItemのvalueを返す
         return getItem() == null ? "" : getItem();
     }
+	
+	
+	private ContextMenu createPopUpMenuItem() {
+		ContextMenu popupMenu = new ContextMenu();
+		
+		MenuItem itemRename = new MenuItem("Rename");
+		MenuItem itemNewSecton = new MenuItem("Add Section");
+		MenuItem itemNewPart = new MenuItem("Add Part");
+		MenuItem itemDelete = new MenuItem("Delete");
+		
+		popupMenu.getItems().add(itemRename);
+		popupMenu.getItems().add(itemNewSecton);
+		popupMenu.getItems().add(itemNewPart);
+		popupMenu.getItems().add(itemDelete);
+		
+		return popupMenu;
+	}
 	
 }

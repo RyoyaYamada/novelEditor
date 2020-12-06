@@ -1,24 +1,23 @@
 package model;
 
-public class Section extends IndexNode {
+public class Section extends IndexItem {
 
 	public Section() {
-		Part initialPart = new Part(this.getTitle() +"-1");
-		addPart(initialPart);
+		this("", new Part("part1"));
+//		addPart(initialPart);
 	}
 
 	public Section(String title) {
 		super(title);
-		// TODO 自動生成されたコンストラクター・スタブ
 	}
 	
 	public Section(String title, Part childPart) {
-		super(title);
+		this(title);
 		addPart(childPart);
 	}
 	
 	public Section(String title, Section childSection) {
-		super(title);
+		this(title);
 		addSection(childSection);
 	}
 	

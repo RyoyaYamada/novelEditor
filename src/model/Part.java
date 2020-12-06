@@ -1,6 +1,6 @@
 package model;
 
-public class Part extends IndexNode {
+public class Part extends IndexItem {
 
 	/**
 	 * 本文
