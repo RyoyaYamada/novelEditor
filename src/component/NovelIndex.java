@@ -3,7 +3,6 @@ package component;
 import controller.IndexCellFactory;
 import javafx.scene.control.TreeView;
 import model.IndexItem;
-import model.Novel;
 import model.Part;
 import model.Section;
 
@@ -12,9 +11,9 @@ public class NovelIndex extends TreeView<String> {
 	public NovelIndex() {
 		super();
 
-		this.setShowRoot(true);
+		this.setShowRoot(false);
 		Part part1 = new Part("part1");
-		Novel root = new Novel("root", new Section("Section1",  part1));
+		Section root = new Section("root", new Section("Section1",  part1));
 
 		Part part2 = new Part("part2");
 		Part part3 = new Part("part3");
@@ -27,24 +26,10 @@ public class NovelIndex extends TreeView<String> {
 
 		this.setRoot(root);
 		expandNovelIndex(part1);
-		TreeViewMenu popupMenu = new TreeViewMenu(this);
-		this.setContextMenu(popupMenu);
-		
-		this.setOnContextMenuRequested(event -> {
-			IndexItem selectedItem = (IndexItem) this.getSelectionModel().getSelectedItem();
-			popupMenu.setPopupedNode(selectedItem);
-			if (selectedItem instanceof Novel) {
-				popupMenu.showWithNonSelected();
-			} else if (selectedItem instanceof Section) {
-				popupMenu.showWithSection();
-			} else if (selectedItem instanceof Part) {
-				popupMenu.showWithPart();
-			} else {
-				popupMenu.showNoAll();
-			}
-		});
-		
-		
+
+		TreeViewMenu.createInstance(this);
+
+
 		this.setEditable(true);
 		this.setCellFactory(new IndexCellFactory());
 	}

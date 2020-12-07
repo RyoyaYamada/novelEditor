@@ -1,38 +1,52 @@
 package component;
 
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import model.IndexItem;
+import model.Part;
+import model.Section;
 
 public class IndexCell extends TreeCell<String> {
-	
+
 	private TextField titleArea;
-	
+
 	public IndexCell() {
 		super();
-		
-		
+
+		TreeViewMenu popupMenu = TreeViewMenu.getInstance();
+		this.setContextMenu(popupMenu);
+
+		this.setOnContextMenuRequested(event -> {
+			IndexItem selectedItem = (IndexItem) this.getTreeItem();
+			popupMenu.setPopupedNode(selectedItem);
+			if (selectedItem instanceof Section) {
+				popupMenu.showWithSection();
+			} else if (selectedItem instanceof Part) {
+				popupMenu.showWithPart();
+			} else {
+				popupMenu.showWithNonSelected();
+			}
+		});
+
 	}
-	
+
 
 	public IndexItem getIndexItem() {
 		return (IndexItem) super.getTreeItem();
 	}
-	
+
 	public NovelIndex getNovelIndex() {
 		return (NovelIndex) super.getTreeView();
 	}
 
-		
+
 	@Override
 	public void startEdit() {
 		// TODO 自動生成されたメソッド・スタブ
 		super.startEdit();
-		
+
 		if (titleArea == null) {
 			createTtitleArea();
 		} else {
@@ -43,11 +57,11 @@ public class IndexCell extends TreeCell<String> {
 		titleArea.selectAll();
 	}
 
-	
+
 	@Override
 	protected void updateItem(String item, boolean empty) {
 		super.updateItem(item, empty);
-		
+
 		if (empty) {
 			// 何のデータも結びついていなければ、何も表示しない
 			setText(null);
@@ -76,7 +90,7 @@ public class IndexCell extends TreeCell<String> {
 		setText(getItem());
 		setGraphic(getTreeItem().getGraphic());
 	}
-	
+
 	private void createTtitleArea() {
 		titleArea = new TextField(getString());
 		titleArea.setOnKeyReleased((KeyEvent t) -> {
@@ -87,27 +101,9 @@ public class IndexCell extends TreeCell<String> {
 			}
 		});
 	}
-	
+
 	private String getString() {
 		// getItem: TreeItemのvalueを返す
         return getItem() == null ? "" : getItem();
     }
-	
-	
-	private ContextMenu createPopUpMenuItem() {
-		ContextMenu popupMenu = new ContextMenu();
-		
-		MenuItem itemRename = new MenuItem("Rename");
-		MenuItem itemNewSecton = new MenuItem("Add Section");
-		MenuItem itemNewPart = new MenuItem("Add Part");
-		MenuItem itemDelete = new MenuItem("Delete");
-		
-		popupMenu.getItems().add(itemRename);
-		popupMenu.getItems().add(itemNewSecton);
-		popupMenu.getItems().add(itemNewPart);
-		popupMenu.getItems().add(itemDelete);
-		
-		return popupMenu;
-	}
-	
 }
