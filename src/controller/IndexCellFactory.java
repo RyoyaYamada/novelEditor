@@ -33,7 +33,7 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 	 */
 	private static final String DROP_HINT_STYLE = "-fx-border-color: #eea82f; -fx-border-width: 0 0 2 0; -fx-padding: 3 3 1 3";
 	private static final String DROP_IN_STYLE = "-fx-background: powderblue";
-//	private static final String DEFAULT_CELL_STYLE = "-fx-background: white";
+	private static final String DEFAULT_CELL_STYLE = "-fx-background: white";
 
 
 	public IndexCellFactory() {
@@ -61,6 +61,7 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 			if (parent.getChildren().size() == 0) {
 				parent.getParent().getChildren().remove(parent);
 			}
+			dropZone =  new IndexCell();
 		});
 
 		return cell;
@@ -139,7 +140,7 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 
 	private void clearDropLocation() {
 		if (dropZone != null) {
-			dropZone.setStyle("");
+			dropZone.setStyle(DEFAULT_CELL_STYLE);
 		}
 	}
 
