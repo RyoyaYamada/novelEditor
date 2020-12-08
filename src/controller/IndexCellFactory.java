@@ -31,9 +31,9 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 	/**
 	 *
 	 */
-//	private static final String DROP_HINT_STYLE = "-fx-border-color: #eea82f; -fx-border-width: 0 0 2 0; -fx-padding: 3 3 1 3";
-	private static final String DROP_HINT_STYLE = "-fx-background: powderblue";
-	private static final String DEFAULT_CELL_STYLE = "-fx-background: white";
+	private static final String DROP_HINT_STYLE = "-fx-border-color: #eea82f; -fx-border-width: 0 0 2 0; -fx-padding: 3 3 1 3";
+	private static final String DROP_IN_STYLE = "-fx-background: powderblue";
+//	private static final String DEFAULT_CELL_STYLE = "-fx-background: white";
 
 
 	public IndexCellFactory() {
@@ -50,11 +50,6 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 
 		cell.setOnDragOver(event -> {
 			dragOver(event, cell, cell.getNovelIndex());
-		});
-
-		cell.setOnDragExited(event -> {
-			cell.setStyle(DEFAULT_CELL_STYLE);
-			event.consume();
 		});
 
 		cell.setOnDragDropped(event -> {
@@ -117,7 +112,6 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 
 	private void dragDrop(DragEvent event, IndexCell treeCell,  NovelIndex novelIndex) {
 		Dragboard dragboard = event.getDragboard();
-		boolean success = false;
 
 		if (!dragboard.hasContent(JAVA_FORMAT)) {
 			return;
@@ -129,20 +123,18 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 		if (dropTo.isChildOf(draggedNode)) {
 			return;
 		}
-		
+
 		droppedItemParent.getChildren().remove(draggedNode);
 
-		if (dropTo instanceof Section) {
+		if (dropTo instanceof Section && dropTo.isExpanded()) {
 			dropTo.getChildren().add(0, draggedNode);
 			novelIndex.expandNovelIndex(draggedNode);
-			success = true;
 		} else {
 			int indexInParent = dropTo.getParent().getChildren().indexOf(dropTo);
 			dropTo.getParent().getChildren().add(indexInParent + 1, draggedNode);
-			success = true;
 		}
 		novelIndex.expandNovelIndex(draggedNode);
-		event.setDropCompleted(success);
+		event.setDropCompleted(true);
 	}
 
 	private void clearDropLocation() {
