@@ -45,7 +45,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="318.0" prefWidth="56.0">
                <children>
-                  <NovelIndex fx:id="novelIndex" prefHeight="276.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <NovelIndex fx:id="novelIndex" stylesheets="@application.css" prefHeight="276.0" prefWidth="153.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
