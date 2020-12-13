@@ -12,7 +12,7 @@ public class NovelIndex extends TreeView<String> {
 	public NovelIndex() {
 		super();
 		TreeViewMenu.createInstance(this);
-		this.setShowRoot(false);
+		this.setShowRoot(true);
 
 		init();
 
@@ -28,7 +28,7 @@ public class NovelIndex extends TreeView<String> {
 
 	public void init() {
 		Part part1 = new Part("part1");
-		Title root = new Title("root", new Section("Section1",  part1));
+		Title root = new Title("New Title", new Section("Section1",  part1));
 
 		this.setRoot(root);
 		expandNovelIndex(part1);

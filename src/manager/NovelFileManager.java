@@ -24,47 +24,41 @@ import model.Section;
 import model.Title;
 
 public class NovelFileManager {
-	
-	private static FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("すべてのファイル", "*.*");
-	private static FileChooser.ExtensionFilter novelFilter = new FileChooser.ExtensionFilter("小説ファイル(*.novel)", "*.novel");
+
+	public static final FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("すべてのファイル", "*.*");
+	public static final FileChooser.ExtensionFilter novelFilter = new FileChooser.ExtensionFilter("小説ファイル(*.novel)", "*.novel");
 
 	public NovelFileManager() {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
-	
-	public Title load() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select Title");
-		fileChooser.getExtensionFilters().addAll(novelFilter, allFilter);
-		File novelFile = fileChooser.showOpenDialog(null);
-		
+
+	public Title load(File novelFile) {
 		Document document = null;
 		try {
 			document = DocumentBuilderFactory
 									.newInstance()
 									.newDocumentBuilder()
-									.parse(novelFile);			
+									.parse(novelFile);
 		} catch (SAXException | IOException | ParserConfigurationException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		
-		
+
 		document.getDocumentElement().normalize();
-		
+
 		Element novel = document.getDocumentElement();
 		String novelTitle = novel.getAttribute("title");
 		Title title = new Title(novelTitle);
-		
+
 		NodeList items = novel.getChildNodes();
 		constructIndex(items, title);
 		return title;
 	}
-	
+
 	private void constructIndex(NodeList items, Section parent) {
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
-			
+
 			if (item.getNodeType() == Node.ELEMENT_NODE) {
 				if (item.getNodeName().equals("Section")) {
 					Section childSection = new Section(item.getAttribute("title"));
@@ -77,40 +71,41 @@ public class NovelFileManager {
 					parent.addPart(part);
 				}
 			}
-			
-			
 		}
 	}
-	
+
 	public File save(File novelFile, Title root) {
-		
+
 		if (novelFile == null) {
 			FileChooser folder = new FileChooser();
 			folder.setTitle("Save file");
 			folder.getExtensionFilters().addAll(novelFilter, allFilter);
 			folder.setInitialFileName(root.getTitle());
-			
+
 			novelFile = folder.showSaveDialog(null);
-			
+
 			if (novelFile == null) {
 				return novelFile;
 			}
 		}
-		
+
 		try {
 			Document doc = DocumentBuilderFactory
 							.newInstance()
 							.newDocumentBuilder()
 							.newDocument();
 			tree2xml(doc, null, root);
-			
+
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
+
 			StreamResult result = new StreamResult(novelFile);
-		
+
 			transformer.transform(source, result);
-			
+			if (root.getTitle().equals(novelFile.getName())) {
+
+			}
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (TransformerException e) {
@@ -118,7 +113,7 @@ public class NovelFileManager {
 		}
 		return novelFile;
 	}
-	
+
 	private void tree2xml(Document doc,Element parent, TreeItem<String> item) {
 		Element element = null;
 		if (item instanceof Title) {
