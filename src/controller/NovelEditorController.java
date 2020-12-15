@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import component.EditArea;
 import component.EditableLabel;
 import component.NovelIndex;
+import consts.Strings;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -16,7 +18,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import manager.NovelFileManager;
+import manager.NovelIOManager;
 import model.IndexItem;
 import model.Part;
 import model.Title;
@@ -40,7 +42,7 @@ public class NovelEditorController implements Initializable{
 	
 	private File saveFile = null;
 
-	private NovelFileManager manager = new NovelFileManager();
+	private NovelIOManager manager = new NovelIOManager();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -65,7 +67,7 @@ public class NovelEditorController implements Initializable{
 	
 	private void initToolBar() {
 		titleField.setRootItem(novelIndex.getRoot());
-		titleField.setText("New Title");
+		titleField.setText(Strings.defaultTitle.getString());
 		Double fontsize = editArea.getFont().getSize();
 		fontSizeCombo.getItems().addAll(new String[]{"8","9","10","11","12","14","16","18","20","22","24","26","28","36","48","72"});
 		fontSizeCombo.setEditable(true);
@@ -79,6 +81,7 @@ public class NovelEditorController implements Initializable{
 	@FXML
 	public void newTitle() {
 		novelIndex.init();
+		titleField.setText(Strings.defaultTitle.getString());
 		saveFile = null;
 	}
 
@@ -86,33 +89,54 @@ public class NovelEditorController implements Initializable{
 	public void load() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select Title");
-		fileChooser.getExtensionFilters().addAll(NovelFileManager.novelFilter, NovelFileManager.allFilter);
+		fileChooser.getExtensionFilters().addAll(NovelIOManager.novelFilter, NovelIOManager.allFilter);
 		File novelFile = fileChooser.showOpenDialog(null);
 
 		if (novelFile != null) {
 			Title root = manager.load(novelFile);
 			novelIndex.setRoot(root);
+			titleField.setText(root.getTitle());
+			saveFile = novelFile;
 		}
 	}
 
 	@FXML
 	public void save() {
-		 IndexItem selectedPart = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
-		 if (selectedPart instanceof Part) {
-			 editArea.saveContext((Part) selectedPart);
+		 IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
+		 if (selectedItem instanceof Part) {
+			 editArea.saveContext((Part) selectedItem);
 		 }
 		saveFile = manager.save(saveFile, (Title) novelIndex.getRoot());
 	}
 
 	@FXML
 	public void saveAs() {
-		IndexItem selectedPart = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
-		 if (selectedPart instanceof Part) {
-			 editArea.saveContext((Part) selectedPart);
+		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
+		 if (selectedItem instanceof Part) {
+			 editArea.saveContext((Part) selectedItem);
 		 }
 		manager.save(null, (Title) novelIndex.getRoot());
 	}
 
+	@FXML
+	public void export() {
+		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
+		 if (selectedItem instanceof Part) {
+			 editArea.saveContext((Part) selectedItem);
+		 }
+		 manager.export(selectedItem);
+	}
+	
+	@FXML
+	public void exportAll() {
+		manager.export((IndexItem) novelIndex.getRoot());
+	}
+	
+	@FXML
+	public void close() {
+		Platform.exit();
+	}
+	
 	@FXML
 	public void toggleWrap() {
 		editArea.setWrapText(!editArea.isWrapText());

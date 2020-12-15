@@ -15,13 +15,14 @@ public class EditableLabel extends Label {
 
 	public EditableLabel() {
 		this("");
+		this.setWidth(editField.getWidth());
 	}
 
 	public EditableLabel(String text) {
 		super(text);
 		this.setOnMouseClicked(e -> {
 			if (e.getClickCount() == 2) {
-				editField.setText(backup);
+				editField.setText(backup = getText());
 				this.setGraphic(editField);
 				this.setText("");
 				editField.requestFocus();
@@ -29,6 +30,7 @@ public class EditableLabel extends Label {
 		});
 		
 		editField.focusedProperty().addListener((observal, oldValue, newValue) -> {
+			// observal, oldValue, newValueはBoolean => focusがなくなった時に、呼び出される
 			if (!newValue) {
 				toLabel();
 			}

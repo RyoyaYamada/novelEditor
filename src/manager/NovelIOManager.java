@@ -1,7 +1,10 @@
 package manager;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,17 +21,20 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javafx.scene.control.TreeItem;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import model.IndexItem;
 import model.Part;
 import model.Section;
 import model.Title;
 
-public class NovelFileManager {
+public class NovelIOManager {
 
 	public static final FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("すべてのファイル", "*.*");
 	public static final FileChooser.ExtensionFilter novelFilter = new FileChooser.ExtensionFilter("小説ファイル(*.novel)", "*.novel");
+	public static final FileChooser.ExtensionFilter textFilter = new FileChooser.ExtensionFilter("テキストファイル(*.txt)", "*.txt");
 
-	public NovelFileManager() {
+	public NovelIOManager() {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
 
@@ -40,7 +46,6 @@ public class NovelFileManager {
 									.newDocumentBuilder()
 									.parse(novelFile);
 		} catch (SAXException | IOException | ParserConfigurationException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 
@@ -137,5 +142,48 @@ public class NovelFileManager {
 		}
 		parent.appendChild(element);
 	}
+
+	public void export(IndexItem exportItem) {
+		
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Export Folder");
+		File exportFolder = directoryChooser.showDialog(null);
+		if (exportFolder == null) {
+			return;
+		}
+		
+		tree2text(exportItem, exportFolder);
+		
+	}
+	
+	private void tree2text(IndexItem item, File exportFolder) {
+		if (item instanceof Part) {
+			File exportFile = new File(exportFolder, ((Part) item).getTitle() + ".txt");
+			PrintWriter pWriter = null;
+			try {
+				pWriter = new PrintWriter(new BufferedWriter(new FileWriter(exportFile)));
+				pWriter.print(((Part) item).getContext());
+			} catch (IOException e) {
+				// TODO 自動生成された catch ブロック
+				e.printStackTrace();
+			} finally {
+				if (pWriter != null) {
+					pWriter.close();
+				}
+			}
+		} else if (item instanceof Section) {
+			File newFolder = new File(exportFolder, ((Section) item).getTitle());
+			newFolder.mkdir();
+			for (TreeItem<String> child : item.getChildren()) {				
+				tree2text((IndexItem) child, newFolder);
+			}
+		} else {
+			return;
+		}
+		
+	}
+		
+		
+		
 
 }
