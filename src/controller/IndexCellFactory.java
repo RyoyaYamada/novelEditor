@@ -13,6 +13,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import model.IndexItem;
 import model.Section;
 
@@ -42,7 +43,20 @@ public class IndexCellFactory implements Callback<TreeView<String>, TreeCell<Str
 
 	@Override
 	public IndexCell call(TreeView<String> param) {
-		IndexCell cell = new IndexCell();
+		IndexCell cell = new IndexCell(new StringConverter<String>() {
+			
+			@Override
+			public String toString(String object) {
+				// TODO 自動生成されたメソッド・スタブ
+				return object;
+			}
+			
+			@Override
+			public String fromString(String string) {
+				// TODO 自動生成されたメソッド・スタブ
+				return string;
+			}
+		});
 
 		cell.setOnDragDetected((MouseEvent event) -> {
 			dragDetect(event, cell, cell.getNovelIndex());

@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import component.EditArea;
 import component.EditableLabel;
 import component.NovelIndex;
@@ -79,6 +81,17 @@ public class NovelEditorController implements Initializable{
 	}
 
 	@FXML
+	public void changeFont() {
+		editArea.setFont(new Font(fontCombo.getValue(), Double.parseDouble(fontSizeCombo.getValue())));
+	}
+	
+	@FXML
+	public void changeFontSize() {
+		editArea.setFont(new Font(fontCombo.getValue(), Double.parseDouble(fontSizeCombo.getValue())));
+	}
+	
+	
+	@FXML
 	public void newTitle() {
 		novelIndex.init();
 		titleField.setText(Strings.defaultTitle.getString());
@@ -140,6 +153,11 @@ public class NovelEditorController implements Initializable{
 	@FXML
 	public void toggleWrap() {
 		editArea.setWrapText(!editArea.isWrapText());
+	}
+	
+	@FXML
+	public void count() {
+		JOptionPane.showMessageDialog(null, editArea.countWords(), "文字数", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }

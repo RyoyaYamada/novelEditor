@@ -18,4 +18,7 @@ public class EditArea extends TextArea {
 		part.setContext(this.getText());
 	}
 
+	public int countWords() {
+		return this.getText().length();
+	}
 }

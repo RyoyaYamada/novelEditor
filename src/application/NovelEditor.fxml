@@ -71,6 +71,7 @@
                     		<KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     	</accelerator>
                     </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#count" text="Count" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -84,8 +85,8 @@
             	<items>
             		<EditableLabel fx:id="titleField" prefWidth="100"/>
             		<Separator orientation="VERTICAL" />
-            		<ComboBox fx:id="fontCombo" prefHeight="25.0" prefWidth="140.0" />
-	                <ComboBox fx:id="fontSizeCombo"  prefHeight="25.0" prefWidth="140.0" />
+            		<ComboBox fx:id="fontCombo" onAction="#changeFont" prefHeight="25.0" prefWidth="140.0" />
+	                <ComboBox fx:id="fontSizeCombo"  onAction="#changeFontSize" prefHeight="25.0" prefWidth="140.0" />
             		<Separator orientation="VERTICAL" />
             	</items>
             </ToolBar>

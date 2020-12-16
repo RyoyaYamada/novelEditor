@@ -1,6 +1,7 @@
 package component;
 
 import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.util.StringConverter;
 import model.IndexItem;
 import model.Part;
 import model.Section;
@@ -26,6 +27,26 @@ public class IndexCell extends TextFieldTreeCell<String> {
 			}
 		});
 
+	}
+
+
+
+	public IndexCell(StringConverter<String> stringConverter) {
+		super(stringConverter);
+		TreeViewMenu popupMenu = TreeViewMenu.getInstance();
+		this.setContextMenu(popupMenu);
+
+		this.setOnContextMenuRequested(event -> {
+			IndexItem selectedItem = (IndexItem) this.getTreeItem();
+			popupMenu.setPopupedNode(selectedItem);
+			if (selectedItem instanceof Section) {
+				popupMenu.showWithSection();
+			} else if (selectedItem instanceof Part) {
+				popupMenu.showWithPart();
+			} else {
+				popupMenu.showWithNonSelected();
+			}
+		});
 	}
 
 
