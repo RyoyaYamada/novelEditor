@@ -71,7 +71,7 @@
                     		<KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     	</accelerator>
                     </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#count" text="Count" />
+                    <MenuItem mnemonicParsing="false" onAction="#count" text="Count" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
