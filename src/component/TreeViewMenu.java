@@ -127,11 +127,4 @@ public class TreeViewMenu extends ContextMenu {
 		itemDelete.setDisable(true);
 	}
 
-//	public void showNoAll() {
-//		itemRename.setDisable(true);
-//		itemNewSecton.setDisable(true);
-//		itemNewPart.setDisable(true);
-//		itemDelete.setDisable(true);
-//	}
-
 }

@@ -182,8 +182,4 @@ public class NovelIOManager {
 		}
 		
 	}
-		
-		
-		
-
-}
+		}
