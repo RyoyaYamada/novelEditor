@@ -17,6 +17,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ProgressIndicator?>
 
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controller.NovelEditorController">
@@ -37,7 +38,7 @@
                     		<KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     	</accelerator>
                     </MenuItem>
-                    <MenuItem mnemonicParsing="false" onAction="#save" text="Overwrite">
+                    <MenuItem mnemonicParsing="false" onAction="#overwrite" text="Overwrite">
                     	<accelerator>
                     		<KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                     	</accelerator>
@@ -84,10 +85,12 @@
             <ToolBar prefHeight="40.0" prefWidth="600.0">
             	<items>
             		<EditableLabel fx:id="titleField" prefWidth="100"/>
+            		<ProgressIndicator fx:id="progress" prefHeight="25.0" prefWidth="25.0" visible="false"/>
             		<Separator orientation="VERTICAL" />
             		<ComboBox fx:id="fontCombo" onAction="#changeFont" prefHeight="25.0" prefWidth="140.0" />
 	                <ComboBox fx:id="fontSizeCombo"  onAction="#changeFontSize" prefHeight="25.0" prefWidth="140.0" />
             		<Separator orientation="VERTICAL" />
+            		
             	</items>
             </ToolBar>
          </children>

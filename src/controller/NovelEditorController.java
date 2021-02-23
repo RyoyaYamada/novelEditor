@@ -11,20 +11,30 @@ import component.EditArea;
 import component.EditableLabel;
 import component.NovelIndex;
 import consts.Strings;
+import exception.EditorIOException;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TreeItem;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import manager.EditorDialog;
 import manager.NovelIOManager;
 import model.IndexItem;
 import model.Part;
 import model.Title;
 
+/**
+ *
+ * @author ryouya
+ *
+ * XMLで定義したアクションのコントローラー。
+ */
 public class NovelEditorController implements Initializable{
 
 	@FXML
@@ -32,16 +42,19 @@ public class NovelEditorController implements Initializable{
 
 	@FXML
 	private NovelIndex novelIndex;
-	
+
 	@FXML
 	private EditableLabel titleField;
 
 	@FXML
 	private ComboBox<String> fontSizeCombo;
-	
+
 	@FXML
 	private ComboBox<String> fontCombo;
-	
+
+	@FXML
+	private ProgressIndicator progress;
+
 	private File saveFile = null;
 
 	private NovelIOManager manager = new NovelIOManager();
@@ -66,7 +79,7 @@ public class NovelEditorController implements Initializable{
 			}
 		});
 	}
-	
+
 	private void initToolBar() {
 		titleField.setRootItem(novelIndex.getRoot());
 		titleField.setText(Strings.defaultTitle.getString());
@@ -84,13 +97,13 @@ public class NovelEditorController implements Initializable{
 	public void changeFont() {
 		editArea.setFont(new Font(fontCombo.getValue(), Double.parseDouble(fontSizeCombo.getValue())));
 	}
-	
+
 	@FXML
 	public void changeFontSize() {
 		editArea.setFont(new Font(fontCombo.getValue(), Double.parseDouble(fontSizeCombo.getValue())));
 	}
-	
-	
+
+
 	@FXML
 	public void newTitle() {
 		novelIndex.init();
@@ -100,6 +113,7 @@ public class NovelEditorController implements Initializable{
 
 	@FXML
 	public void load() {
+//		progress.setVisible(true);
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select Title");
 		fileChooser.getExtensionFilters().addAll(NovelIOManager.novelFilter, NovelIOManager.allFilter);
@@ -111,24 +125,33 @@ public class NovelEditorController implements Initializable{
 			titleField.setText(root.getTitle());
 			saveFile = novelFile;
 		}
+//		progress.setVisible(false);
 	}
 
 	@FXML
-	public void save() {
-		 IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
-		 if (selectedItem instanceof Part) {
-			 editArea.saveContext((Part) selectedItem);
-		 }
-		saveFile = manager.save(saveFile, (Title) novelIndex.getRoot());
+	public void overwrite() {
+		save(saveFile);
 	}
 
 	@FXML
 	public void saveAs() {
+		save(null);
+	}
+
+	private void save(File saveFile) {
+		progress.setVisible(true);
 		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
-		 if (selectedItem instanceof Part) {
-			 editArea.saveContext((Part) selectedItem);
-		 }
-		manager.save(null, (Title) novelIndex.getRoot());
+		if (selectedItem instanceof Part) {
+			editArea.saveContext((Part) selectedItem);
+		}
+		try {
+			new EditorDialog(AlertType.INFORMATION, "通知", "", "保存完了").showAndWait();
+			saveFile = manager.save(saveFile, (Title) novelIndex.getRoot());
+		} catch (EditorIOException e) {
+			new EditorDialog(AlertType.INFORMATION, "通知", "保存失敗", e.getMessage());
+		} finally {
+			progress.setVisible(false);
+		}
 	}
 
 	@FXML
@@ -139,25 +162,27 @@ public class NovelEditorController implements Initializable{
 		 }
 		 manager.export(selectedItem);
 	}
-	
+
 	@FXML
 	public void exportAll() {
 		manager.export((IndexItem) novelIndex.getRoot());
 	}
-	
+
 	@FXML
 	public void close() {
 		Platform.exit();
 	}
-	
+
 	@FXML
 	public void toggleWrap() {
 		editArea.setWrapText(!editArea.isWrapText());
 	}
-	
+
 	@FXML
 	public void count() {
+		progress.setVisible(true);
 		JOptionPane.showMessageDialog(null, editArea.countWords(), "文字数", JOptionPane.INFORMATION_MESSAGE);
+		progress.setVisible(false);
 	}
 
 }

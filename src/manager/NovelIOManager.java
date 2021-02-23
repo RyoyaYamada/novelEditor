@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import exception.EditorIOException;
 import javafx.scene.control.TreeItem;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -79,7 +80,7 @@ public class NovelIOManager {
 		}
 	}
 
-	public File save(File novelFile, Title root) {
+	public File save(File novelFile, Title root) throws EditorIOException{
 
 		if (novelFile == null) {
 			FileChooser folder = new FileChooser();
@@ -112,9 +113,9 @@ public class NovelIOManager {
 
 			}
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			throw new EditorIOException(e);
 		} catch (TransformerException e) {
-			e.printStackTrace();
+			throw new EditorIOException(e);
 		}
 		return novelFile;
 	}
@@ -144,18 +145,18 @@ public class NovelIOManager {
 	}
 
 	public void export(IndexItem exportItem) {
-		
+
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Export Folder");
 		File exportFolder = directoryChooser.showDialog(null);
 		if (exportFolder == null) {
 			return;
 		}
-		
+
 		tree2text(exportItem, exportFolder);
-		
+
 	}
-	
+
 	private void tree2text(IndexItem item, File exportFolder) {
 		if (item instanceof Part) {
 			File exportFile = new File(exportFolder, ((Part) item).getTitle() + ".txt");
@@ -174,12 +175,12 @@ public class NovelIOManager {
 		} else if (item instanceof Section) {
 			File newFolder = new File(exportFolder, ((Section) item).getTitle());
 			newFolder.mkdir();
-			for (TreeItem<String> child : item.getChildren()) {				
+			for (TreeItem<String> child : item.getChildren()) {
 				tree2text((IndexItem) child, newFolder);
 			}
 		} else {
 			return;
 		}
-		
+
 	}
 		}
