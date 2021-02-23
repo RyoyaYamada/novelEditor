@@ -5,10 +5,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.swing.JOptionPane;
-
 import component.EditArea;
 import component.EditableLabel;
+import component.EditorDialog;
 import component.NovelIndex;
 import consts.Strings;
 import exception.EditorIOException;
@@ -23,10 +22,10 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TreeItem;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import manager.EditorDialog;
 import manager.NovelIOManager;
 import model.IndexItem;
 import model.Part;
+import model.Section;
 import model.Title;
 
 /**
@@ -138,29 +137,13 @@ public class NovelEditorController implements Initializable{
 		save(null);
 	}
 
-	private void save(File saveFile) {
-		progress.setVisible(true);
+	@FXML
+	public void export() {
 		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
 		if (selectedItem instanceof Part) {
 			editArea.saveContext((Part) selectedItem);
 		}
-		try {
-			new EditorDialog(AlertType.INFORMATION, "通知", "", "保存完了").showAndWait();
-			saveFile = manager.save(saveFile, (Title) novelIndex.getRoot());
-		} catch (EditorIOException e) {
-			new EditorDialog(AlertType.INFORMATION, "通知", "保存失敗", e.getMessage());
-		} finally {
-			progress.setVisible(false);
-		}
-	}
-
-	@FXML
-	public void export() {
-		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
-		 if (selectedItem instanceof Part) {
-			 editArea.saveContext((Part) selectedItem);
-		 }
-		 manager.export(selectedItem);
+		manager.export(selectedItem);
 	}
 
 	@FXML
@@ -181,8 +164,38 @@ public class NovelEditorController implements Initializable{
 	@FXML
 	public void count() {
 		progress.setVisible(true);
-		JOptionPane.showMessageDialog(null, editArea.countWords(), "文字数", JOptionPane.INFORMATION_MESSAGE);
+		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
+		int count = countRecursive(selectedItem);
 		progress.setVisible(false);
+		new EditorDialog(AlertType.INFORMATION, "文字数", null, String.valueOf(count)).showAndWait();
+	}
+	
+	private int countRecursive(TreeItem<String> indexItem) {
+		int count = 0;
+		if (indexItem instanceof Section) {
+			for (TreeItem<String> child : indexItem.getChildren()) {
+				count += countRecursive(child);
+			}
+		} else if (indexItem instanceof Part) {
+			count = ((Part) indexItem).getContext().length();
+		}
+		return count;
 	}
 
+	private void save(File saveFile) {
+		progress.setVisible(true);
+		IndexItem selectedItem = (IndexItem) novelIndex.getSelectionModel().getSelectedItem();
+		if (selectedItem instanceof Part) {
+			editArea.saveContext((Part) selectedItem);
+		}
+		try {
+			new EditorDialog(AlertType.INFORMATION, "通知", "", "保存完了").showAndWait();
+			saveFile = manager.save(saveFile, (Title) novelIndex.getRoot());
+		} catch (EditorIOException e) {
+			new EditorDialog(AlertType.INFORMATION, "通知", "保存失敗", e.getMessage());
+		} finally {
+			progress.setVisible(false);
+		}
+	}
+	
 }
